@@ -49,13 +49,26 @@ precedeA(unaNuevaEsperanza,elImperioContrataca).
 
 %Desarrollo:
 
-% nuevoEpisodio(Heroe, Villano, Extra, Dispositivo) :-
-%     apareceEn(Heroe,_,_),
-%     apareceEn(Villano,_,_),
-%     apareceEn(Extra,_,_),
-%     personajesDiferentes(Heroe,Villano,Extra),
-%     jediPerpetuo(Heroe).
+nuevoEpisodio(Heroe, Villano, Extra, Dispositivo) :-
+    apareceEn(Heroe,_,_),
+    apareceEn(Villano,_,_),
+    apareceEn(Extra,_,_),
+    personajesDiferentes(Heroe,Villano,Extra),
+    jediPerpetuo(Heroe),
+    villanoAmbiguo(Villano),
+    condicionExtra(Extra,Heroe),
+    esReconocible(Dispositivo).
 
+nuevoEpisodio(Heroe, Villano, Extra, Dispositivo) :-
+    apareceEn(Heroe,_,_),
+    apareceEn(Villano,_,_),
+    apareceEn(Extra,_,_),
+    personajesDiferentes(Heroe,Villano,Extra),
+    jediPerpetuo(Heroe),
+    villanoAmbiguo(Villano),
+    condicionExtra(Extra,Villano),
+    esReconocible(Dispositivo).
+    
 
 personajesDiferentes(Personaje1,Personaje2,Personaje3):-
     Personaje1\=Personaje2,
@@ -89,13 +102,13 @@ episodioAnteriorA(Episodio1,Episodio2) :-
     episodioAnteriorA(X,Episodio2).
 
 
-% condicionExtra(Extra,Heroe,Villano) :-
-%     esFiel(Extra,Heroe,Villano),
-%     esExotico(Extra).
+condicionExtra(Extra,Personaje) :-
+    esFiel(Extra,Personaje),
+    esExotico(Extra).
 
-% esFiel(Extra,Personaje) :-
-%     apareceEn(Extra,_,_),
-%     forall(apareceEn(Personaje,Episodiox,_),apareceEn(Extra,Episodiox,_)).
+esFiel(Extra,Personaje) :-
+    apareceEn(Extra,_,_),
+    forall(apareceEn(Extra,Episodiox,_),apareceEn(Personaje,Episodiox,_)).
 
 
 esExotico(Extra) :-
@@ -107,9 +120,12 @@ esExotico(Extra) :-
 esExotico(Extra) :-
     caracterizacion(Extra,ser(desconocido,_)).
 
-
 esReconocible(Dispositivo) :-
-    elementosPresentes(_,Lista),
-    findall(Dispositivo,(member(Dispositivo,Lista),elementosPresentes(_,Lista)),ListaAux),
-    length(ListaAux,Aux),
+    existeDispositivo(Dispositivo,_),
+    findall(Episodio,existeDispositivo(Dispositivo,Episodio),Lista),
+    length(Lista,Aux),
     Aux >= 3.
+
+existeDispositivo(Dispositivo,Episodio):-
+    elementosPresentes(Episodio,Lista),
+    member(Dispositivo,Lista).
