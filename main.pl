@@ -49,9 +49,12 @@ precedeA(unaNuevaEsperanza,elImperioContrataca).
 
 %Desarrollo:
 
-nuevoEpisodio(Heroe, Villano, Extra, Dispositivo) :-
-    personajesDiferentes(Heroe,Villano,Extra),
-    jediPerpetuo(Heroe).
+% nuevoEpisodio(Heroe, Villano, Extra, Dispositivo) :-
+%     apareceEn(Heroe,_,_),
+%     apareceEn(Villano,_,_),
+%     apareceEn(Extra,_,_),
+%     personajesDiferentes(Heroe,Villano,Extra),
+%     jediPerpetuo(Heroe).
 
 
 personajesDiferentes(Personaje1,Personaje2,Personaje3):-
@@ -60,4 +63,33 @@ personajesDiferentes(Personaje1,Personaje2,Personaje3):-
     Personaje2\=Personaje3.
 
 jediPerpetuo(Jedi) :-
-    
+    maestro(Jedi),
+    apareceEn(Jedi,_,luminoso),
+    not((apareceEn(Jedi,_,Otro),Otro \= luminoso)).
+
+
+% villanoAmbiguo(Villano) :-
+%     apareceEn(Villano,Episodio1,_),
+%     apareceEn(Villano,Episodio2,_),
+%     Episodio1 \= Episodio2,
+%     enLadoOscuro(Villano).
+
+% enLadoOscuro(Villano) :-
+
+% condicionExtra(Extra,Heroe,Villano) :-
+%     esFiel(Extra,Heroe,Villano),
+%     esExotico(Extra).
+
+% esFiel(Extra,Heroe,Villano) :-
+%     apareceEn(Extra,Episodio,_),
+%     forall(apareceEn())
+
+% esExotico(Extra) :-
+%     caracterizacion(Extra,)
+
+
+esReconocible(Dispositivo) :-
+    elementosPresentes(_,Lista),
+    findall(Dispositivo,(member(Dispositivo,Lista),elementosPresentes(_,Lista)),ListaAux),
+    length(ListaAux,Aux),
+    Aux >= 3.
