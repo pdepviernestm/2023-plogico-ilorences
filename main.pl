@@ -68,24 +68,44 @@ jediPerpetuo(Jedi) :-
     not((apareceEn(Jedi,_,Otro),Otro \= luminoso)).
 
 
-% villanoAmbiguo(Villano) :-
-%     apareceEn(Villano,Episodio1,_),
-%     apareceEn(Villano,Episodio2,_),
-%     Episodio1 \= Episodio2,
-%     enLadoOscuro(Villano).
+villanoAmbiguo(Villano) :-
+    apareceEn(Villano,Episodio1,_),
+    apareceEn(Villano,Episodio2,_),
+    Episodio1 \= Episodio2,
+    enLadoOscuro(Villano).
 
-% enLadoOscuro(Villano) :-
+enLadoOscuro(Villano) :-
+    apareceEn(Villano,Episodio,luminoso),
+    apareceEn(Villano,Episodio,oscuro).
+
+enLadoOscuro(Villano) :-
+    apareceEn(Villano,Episodio1,luminoso),
+    apareceEn(Villano,Episodio2,oscuro),
+    episodioAnteriorA(Episodio1,Episodio2).
+
+episodioAnteriorA(Episodio1,Episodio2) :- precedeA(Episodio1,Episodio2).
+episodioAnteriorA(Episodio1,Episodio2) :-
+    precedeA(Episodio1,X),
+    episodioAnteriorA(X,Episodio2).
+
 
 % condicionExtra(Extra,Heroe,Villano) :-
 %     esFiel(Extra,Heroe,Villano),
 %     esExotico(Extra).
 
-% esFiel(Extra,Heroe,Villano) :-
-%     apareceEn(Extra,Episodio,_),
-%     forall(apareceEn())
+% esFiel(Extra,Personaje) :-
+%     apareceEn(Extra,_,_),
+%     forall(apareceEn(Personaje,Episodiox,_),apareceEn(Extra,Episodiox,_)).
 
-% esExotico(Extra) :-
-%     caracterizacion(Extra,)
+
+esExotico(Extra) :-
+    caracterizacion(Extra,robot(Forma)),
+    Forma \= esfera.
+esExotico(Extra) :-
+    caracterizacion(Extra,ser(_,Tamanio)),
+    Tamanio > 15.
+esExotico(Extra) :-
+    caracterizacion(Extra,ser(desconocido,_)).
 
 
 esReconocible(Dispositivo) :-
